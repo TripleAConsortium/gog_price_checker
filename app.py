@@ -1,7 +1,6 @@
 import requests
 import re
 from threading import Thread
-import sys
 import logging
 from argparse import ArgumentParser
 
@@ -149,7 +148,10 @@ def out_result(count):
 
 
 def main(args):
-    product_id = extract_product_id(args.url)
+    if "gogdb.org" in args.url:
+        product_id = args.url.split("/")[-1]
+    else:
+        product_id = extract_product_id(args.url)
     request_prices(product_id,args.normalize)
     sort_prices()
     out_result(args.count)
