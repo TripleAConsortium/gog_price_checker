@@ -14,12 +14,19 @@ The **Game Price Checker** is a Python script that allows you to extract a URL f
 
 1. Copy a URL containing a game page (e.g., `https://www.gog.com/game/diablo`) to the clipboard.
 
-2. Run the Python script by providing the copied URL as an argument.
-   `python3 app.py https://www.gog.com/game/diablo`
+2. Run the Python script with the following arguments:
 
-4. The script will download the web page, extract the product ID, and fetch the price from the GOG API for multiple countries concurrently using threads.
+    - `-u`, `--url`: The URL of the game page to scrape (required).
+    - `-n`, `--normalize`: (Optional) Normalize currencies to USD.
 
-5. The prices for different countries will be displayed in descending order of value.
+Example:
+```
+python app.py -u https://www.gog.com/game/diablo -n
+```
+
+3. The script will download the web page, extract the product ID, and fetch the price from the GOG API for multiple countries concurrently using threads.
+
+4. The prices for different countries will be displayed in descending order of value. If the `-n` flag is provided, the prices will be normalized to USD.
 
 ## Limitations
 
