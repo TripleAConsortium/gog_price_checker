@@ -1,3 +1,4 @@
+# TODO: 27.07.2023-23:15 переписать на стандартный urllib
 import requests
 import re
 from threading import Thread
