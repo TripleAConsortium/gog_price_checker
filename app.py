@@ -3,6 +3,7 @@ import re
 from threading import Thread
 import sys
 import logging
+from argparse import ArgumentParser
 
 COUNTRIES = {
     "US": "United States",
@@ -105,10 +106,12 @@ def extract_product_id(url):
     return product_id
 
 
-def request_price(product_id, country_code):
+def request_price(product_id, country_code, normalize=None):
     data = None
+    url = f"https://api.gog.com/products/{product_id}/prices?countryCode={country_code}"
+    if normalize:
+        url += "&currency=USD"
     try:
-        url = f"https://api.gog.com/products/{product_id}/prices?countryCode={country_code}"
         logging.debug(url)
         response = requests.get(url)
         data = response.json()
@@ -122,10 +125,10 @@ def request_price(product_id, country_code):
         logging.error(data)
 
 
-def request_prices(product_id):
+def request_prices(product_id, normalize = None):
     threads = []
     for country_code in COUNTRIES:
-        t = Thread(target=request_price, args=(product_id, country_code))
+        t = Thread(target=request_price, args=(product_id, country_code, normalize))
         threads.append(t)
         t.start()
 
@@ -134,7 +137,7 @@ def request_prices(product_id):
 
 
 def sort_prices():
-    return sorted(COUNTRY_PRICES.items(), key=lambda x: x[1], reverse=True)
+    return sorted(COUNTRY_PRICES.items(), key=lambda x: x[1], reverse=False)
 
 
 def out_result():
@@ -144,12 +147,19 @@ def out_result():
 
 
 def main(args):
-    product_id = extract_product_id(args[1])
-    request_prices(product_id)
+    product_id = extract_product_id(args.url)
+    request_prices(product_id,args.normalize)
     sort_prices()
     out_result()
 
 
+def init_parser():
+    parser = ArgumentParser()
+    parser.add_argument("-u", "--url", required=True, type=str, help="url to scrape")
+    parser.add_argument("-n", "--normalize", action="store_true", help="normalize currencies to USD")
+    return parser
+
+
 if __name__ == "__main__":
-    args = sys.argv
+    args = init_parser().parse_args()
     main(args)
