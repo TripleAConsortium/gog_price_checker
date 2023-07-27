@@ -1,9 +1,9 @@
-# TODO: 27.07.2023-23:15 переписать на стандартный urllib
-import requests
 import re
 from threading import Thread
 import logging
 from argparse import ArgumentParser
+from urllib import request as urllib_request
+import json
 
 COUNTRIES = {
     "US": "United States",
@@ -90,7 +90,7 @@ COUNTRIES = {
     "ZA": "South Africa",
     "AE": "United Arab Emirates"}
 
-COUNTRY_PRICES: dict = {}
+COUNTRY_PRICES = {}
 
 logging.basicConfig(
     level=logging.INFO,
@@ -98,8 +98,8 @@ logging.basicConfig(
 
 
 def extract_product_id(url):
-    html = requests.get(url)
-    raw_card_product = re.search(r"card-product=\"\d*\"", html.text).group()
+    html = urllib_request.urlopen(url).read().decode('utf-8')
+    raw_card_product = re.search(r"card-product=\"\d*\"", html).group()
     product_id = re.search(r"(\d+)", raw_card_product).group()
     logging.debug(f"raw product id: {raw_card_product}")
     logging.debug(f"product id: {product_id}")
@@ -113,9 +113,9 @@ def request_price(product_id, country_code, normalize=None):
         url += "&currency=USD"
     try:
         logging.debug(url)
-        response = requests.get(url)
-        data = response.json()
-        logging.debug(response.json())
+        response = urllib_request.urlopen(url).read().decode('utf-8')
+        data = json.loads(response)
+        logging.debug(data)
         price = data['_embedded']['prices'][0]['finalPrice'].split(" ")
         price[0] = int(price[0]) / 100
         logging.debug(price)
@@ -125,7 +125,7 @@ def request_price(product_id, country_code, normalize=None):
         logging.error(data)
 
 
-def request_prices(product_id, normalize = None):
+def request_prices(product_id, normalize=None):
     threads = []
     for country_code in COUNTRIES:
         t = Thread(target=request_price, args=(product_id, country_code, normalize))
@@ -142,8 +142,8 @@ def sort_prices():
 
 def out_result(count):
     sorted_prices = sort_prices()
-    for i,price in enumerate(sorted_prices):
-        if i > count:
+    for i, price in enumerate(sorted_prices):
+        if i >= count:
             break
         print(f"{price[0]}: {price[1][0]} {price[1][1]}")
 
@@ -153,7 +153,7 @@ def main(args):
         product_id = args.url.split("/")[-1]
     else:
         product_id = extract_product_id(args.url)
-    request_prices(product_id,args.normalize)
+    request_prices(product_id, args.normalize)
     sort_prices()
     out_result(args.count)
 
