@@ -94,7 +94,7 @@ GOG_PRICE_URL = "https://api.gog.com/products/%ID%/prices?countryCode=%CODE%"
 COUNTRY_PRICES = {}
 
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO,
 )
 
 
@@ -121,15 +121,21 @@ def request_price(product_id, country_code):
 
 
 def request_prices(product_id):
-    request_price(product_id, "AR")
+    threads = []
+    for country_code in COUNTRIES:
+        t = Thread(target=request_price, args=(product_id, country_code))
+        threads.append(t)
+        t.start()
 
-
+    for t in threads:
+        t.join()
 
 def sort_prices():
     pass
 
 
 def out_result():
+    print(COUNTRY_PRICES)
     pass
 
 
