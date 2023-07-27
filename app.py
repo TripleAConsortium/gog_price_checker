@@ -60,7 +60,7 @@ COUNTRIES = {
     "CH": "Switzerland",
     "TR": "Turkey",
     "UA": "Ukraine",
-    "UK": "United Kingdom",
+    "GB": "United Kingdom",
     "AU": "Australia",
     "BD": "Bangladesh",
     "KH": "Cambodia",
@@ -140,9 +140,11 @@ def sort_prices():
     return sorted(COUNTRY_PRICES.items(), key=lambda x: x[1], reverse=False)
 
 
-def out_result():
+def out_result(count):
     sorted_prices = sort_prices()
-    for price in sorted_prices:
+    for i,price in enumerate(sorted_prices):
+        if i > count:
+            break
         print(f"{price[0]}: {price[1][0]} {price[1][1]}")
 
 
@@ -150,13 +152,14 @@ def main(args):
     product_id = extract_product_id(args.url)
     request_prices(product_id,args.normalize)
     sort_prices()
-    out_result()
+    out_result(args.count)
 
 
 def init_parser():
     parser = ArgumentParser()
     parser.add_argument("-u", "--url", required=True, type=str, help="url to scrape")
     parser.add_argument("-n", "--normalize", action="store_true", help="normalize currencies to USD")
+    parser.add_argument("-с", "--count", type=int, default=10, help="number of countries to show")
     return parser
 
 
