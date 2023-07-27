@@ -1,26 +1,30 @@
 # Game Price Checker 💵
 
-The **Game Price Checker** is an AppleScript script that allows you to extract a URL from the clipboard, download the web page content, and retrieve the price of a game from the GOG API. The script is designed to work on macOS systems.
+The **Game Price Checker** is a Python script that allows you to extract a URL from the clipboard, download the web page content, and retrieve the price of a game from the GOG API. The script is designed to work on macOS systems.
 
 ## Requirements
 
-- macOS operating system.
-- AppleScript is pre-installed on macOS and doesn't require additional installations.
+- Python 3.x
+- Requests library (for making HTTP requests)
+- Regular expressions (re) module
+- Threading module (for concurrent requests)
+- Logging module (for logging)
 
 ## How to Use
 
 1. Copy a URL containing a game page (e.g., `https://www.gog.com/game/diablo`) to the clipboard.
 
-2. Run the **Game Price Checker** AppleScript.
+2. Run the Python script by providing the copied URL as an argument.
+   `python3 app.py https://www.gog.com/game/diablo`
 
-3. The script will download the web page, extract the product ID, and fetch the price from the GOG API.
+4. The script will download the web page, extract the product ID, and fetch the price from the GOG API for multiple countries concurrently using threads.
 
-4. A dialog box will be displayed, showing the name of the game and its price in the specified country (Argentina by default).
+5. The prices for different countries will be displayed in descending order of value.
 
 ## Limitations
 
-- The script uses basic shell commands and regular expressions, which might not handle all possible web page structures or API responses. Some pages may require additional parsing logic.
-- The script fetches the price based on the specified `countryCode`, which is set to "AR" (Argentina) by default. You may modify the script to use a different country code as needed.
+- The script uses regular expressions to extract the product ID and prices, which might not handle all possible web page structures or API responses. Some pages may require additional parsing logic.
+- The API endpoint used to fetch prices is specific to GOG, and it may change over time. Ensure the API remains accessible and the script is updated accordingly.
 
 ## Important Note
 
@@ -28,11 +32,11 @@ The **Game Price Checker** is an AppleScript script that allows you to extract a
 
 ## Credits
 
-- This script is provided as an educational example and is not intended for commercial purposes. It was created as a part of a task and is not an official GOG product.
+- This script is provided as an educational example and is not intended for commercial purposes. It was created as part of a task and is not an official GOG product.
 
 ## License
 
-- The **Game Price Checker** AppleScript is released under the [MIT License](LICENSE). Feel free to modify and distribute the script according to the terms of the license.
+- The **Game Price Checker** Python script is released under the [MIT License](LICENSE). Feel free to modify and distribute the script according to the terms of the license.
 
 ## Disclaimer
 
