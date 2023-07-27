@@ -137,18 +137,17 @@ def request_prices(product_id):
 
 
 def sort_prices():
-    global COUNTRY_PRICES
-    COUNTRY_PRICES = sorted(COUNTRY_PRICES.items(), key=lambda x: x[1], reverse=True)
+    return sorted(COUNTRY_PRICES.items(), key=lambda x: x[1], reverse=True)
 
 
 def out_result():
-    print(COUNTRY_PRICES)
-    pass
+    sorted_prices = sort_prices()
+    for price in sorted_prices:
+        print(f"{price[0]}: {price[1][0]} {price[1][1]}")
 
 
 def main(args):
-    game_url = "https://www.gog.com/game/diablo"
-    product_id = extract_product_id(game_url)
+    product_id = extract_product_id(args[1])
     request_prices(product_id)
     sort_prices()
     out_result()
