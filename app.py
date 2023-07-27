@@ -3,6 +3,7 @@ import re
 from threading import Thread
 import sys
 import logging
+
 COUNTRIES = {
     "US": "United States",
     "AR": "Argentina",
@@ -96,6 +97,7 @@ logging.basicConfig(
     level=logging.DEBUG,
 )
 
+
 def extract_product_id(url):
     html = requests.get(url)
     # TODO: 27.07.2023-10:51 регулярка на продакт ид
@@ -110,12 +112,17 @@ def request_price(product_id, country_code):
     url = f"https://api.gog.com/products/{product_id}/prices?countryCode={country_code}"
     logging.debug(url)
     response = requests.get(url)
+    data = response.json()
     logging.debug(response.json())
-
+    price = data['_embedded']['prices'][0]['finalPrice'].split(" ")
+    price[0] = int(price[0]) / 100
+    logging.debug(price)
+    COUNTRY_PRICES[COUNTRIES[country_code]] = price
 
 
 def request_prices(product_id):
     request_price(product_id, "AR")
+
 
 
 def sort_prices():
@@ -136,7 +143,6 @@ def main(args):
 if __name__ == "__main__":
     args = sys.argv
     main(args)
-
 
 {'_links':
      {'self':
