@@ -89,8 +89,6 @@ COUNTRIES = {
     "ZA": "South Africa",
     "AE": "United Arab Emirates"}
 
-GOG_API_URL: str = "https://api.gog.com / products"
-GOG_PRICE_URL: str = "https://api.gog.com/products/%ID%/prices?countryCode=%CODE%"
 COUNTRY_PRICES: dict = {}
 
 logging.basicConfig(
