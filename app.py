@@ -100,7 +100,6 @@ logging.basicConfig(
 
 def extract_product_id(url):
     html = requests.get(url)
-    # TODO: 27.07.2023-10:51 регулярка на продакт ид
     raw_card_product = re.search(r"card-product=\"\d*\"", html.text).group()
     product_id = re.search(r"(\d+)", raw_card_product).group()
     logging.debug(f"raw product id: {raw_card_product}")
