@@ -89,9 +89,9 @@ COUNTRIES = {
     "ZA": "South Africa",
     "AE": "United Arab Emirates"}
 
-GOG_API_URL = "https://api.gog.com / products"
-GOG_PRICE_URL = "https://api.gog.com/products/%ID%/prices?countryCode=%CODE%"
-COUNTRY_PRICES = {}
+GOG_API_URL: str = "https://api.gog.com / products"
+GOG_PRICE_URL: str = "https://api.gog.com/products/%ID%/prices?countryCode=%CODE%"
+COUNTRY_PRICES: dict = {}
 
 logging.basicConfig(
     level=logging.INFO,
@@ -109,15 +109,20 @@ def extract_product_id(url):
 
 
 def request_price(product_id, country_code):
-    url = f"https://api.gog.com/products/{product_id}/prices?countryCode={country_code}"
-    logging.debug(url)
-    response = requests.get(url)
-    data = response.json()
-    logging.debug(response.json())
-    price = data['_embedded']['prices'][0]['finalPrice'].split(" ")
-    price[0] = int(price[0]) / 100
-    logging.debug(price)
-    COUNTRY_PRICES[COUNTRIES[country_code]] = price
+    data = None
+    try:
+        url = f"https://api.gog.com/products/{product_id}/prices?countryCode={country_code}"
+        logging.debug(url)
+        response = requests.get(url)
+        data = response.json()
+        logging.debug(response.json())
+        price = data['_embedded']['prices'][0]['finalPrice'].split(" ")
+        price[0] = int(price[0]) / 100
+        logging.debug(price)
+        COUNTRY_PRICES[COUNTRIES[country_code]] = price
+    except KeyError as no_key_error:
+        logging.error(no_key_error)
+        logging.error(data)
 
 
 def request_prices(product_id):
@@ -130,8 +135,10 @@ def request_prices(product_id):
     for t in threads:
         t.join()
 
+
 def sort_prices():
-    pass
+    global COUNTRY_PRICES
+    COUNTRY_PRICES = sorted(COUNTRY_PRICES.items(), key=lambda x: x[1], reverse=True)
 
 
 def out_result():
@@ -143,19 +150,10 @@ def main(args):
     game_url = "https://www.gog.com/game/diablo"
     product_id = extract_product_id(game_url)
     request_prices(product_id)
+    sort_prices()
     out_result()
 
 
 if __name__ == "__main__":
     args = sys.argv
     main(args)
-
-{'_links':
-     {'self':
-          {'href': '/api/products/1412601690/prices?countryCode=AR'},
-      'product':
-          {'href': 'https://api.gog.com/api/products/1412601690'}
-      },
- '_embedded': {
-     'prices': [
-         {'currency': {'code': 'USD'}, 'basePrice': '999 USD', 'finalPrice': '999 USD', 'bonusWalletFunds': '0 USD'}]}}
