@@ -27,6 +27,8 @@ jobs:
   create_release:
     runs-on: ubuntu-latest
     needs: get_version
+    env:
+      UPLOAD_URL: ${{ steps.create_release.outputs.upload_url }}
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python
@@ -47,10 +49,10 @@ jobs:
       - name: Upload app.py as a release asset
         uses: actions/upload-release-asset@v1
         with:
-          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          upload_url: ${{ env.UPLOAD_URL }}
           asset_path: ./app.py
           asset_name: app.py
-          asset_content_type: text/plain
+          asset_asset_content_type: text/plain
 
   deploy:
     runs-on: ubuntu-latest
