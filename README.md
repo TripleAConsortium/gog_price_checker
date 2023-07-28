@@ -24,8 +24,9 @@ The **Game Price Checker** is a Python script that allows you to extract a URL f
 Example:
 ```
 python app.py -u https://www.gog.com/game/diablo -n -p
->>>...
->>>
+```
+Output:
+```
 Country                   Price      Currency
 ---------------------------------------------
 Ukraine                   5.51       USD
