@@ -77,7 +77,8 @@ def out_result(count, pretty=None):
             print(f"{price[0]}: {price[1][0]} {price[1][1]}")
 
 
-def main(args):
+def main():
+    args = init_parser().parse_args()
     if "gogdb.org" in args.url:
         product_id = args.url.split("/")[-1]
     else:
@@ -97,5 +98,4 @@ def init_parser():
 
 
 if __name__ == "__main__":
-    arguments = init_parser().parse_args()
-    main(args=arguments)
+    main()
