@@ -30,8 +30,9 @@ pip instal gog_price_checker
 Example:
 ```
 gog_price_checker -u https://www.gog.com/game/diablo -n -p
->>>...
->>>
+```
+Output:
+```
 Country                   Price      Currency
 ---------------------------------------------
 Ukraine                   5.51       USD
