@@ -18,11 +18,28 @@ The **Game Price Checker** is a Python script that allows you to extract a URL f
 
     - `-u`, `--url`: The URL of the game page to scrape (required).
     - `-n`, `--normalize`: (Optional) Normalize currencies to USD.
-    - `-c`, `--count` : (Optional) default = 10 , number of countries to show in sorted prices result
+    - `-c`, `--count` : (Optional) default = 10, number of countries to show in sorted prices result
+    - `-p`, `--pretty` : (Optional) shows result as pretty table
 
 Example:
 ```
-python app.py -u https://www.gog.com/game/diablo -n
+python app.py -u https://www.gog.com/game/diablo -n -p
+>>>...
+>>>
+Country                   Price      Currency
+---------------------------------------------
+Ukraine                   5.51       USD
+Moldova                   5.51       USD
+Kazakhstan                5.51       USD
+Armenia                   5.51       USD
+China                     5.57       USD
+Poland                    8.34       USD
+Australia                 9.24       USD
+New Zealand               9.24       USD
+Andorra                   9.99       USD
+Spain                     9.99       USD
+Sweden                    9.99       USD
+...
 ```
 
 3. The script will download the web page, extract the product ID, and fetch the price from the GOG API for multiple countries concurrently using threads.
