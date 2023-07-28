@@ -140,13 +140,25 @@ def sort_prices():
     return sorted(COUNTRY_PRICES.items(), key=lambda x: x[1], reverse=False)
 
 
-def out_result(count):
+def out_result(count, pretty=None):
     sorted_prices = sort_prices()
     count = min(abs(count), len(sorted_prices))
-    for i, price in enumerate(sorted_prices):
-        if i == count:
-            break
-        print(f"{price[0]}: {price[1][0]} {price[1][1]}")
+    if pretty:
+        shift_country = 25
+        shift_price = 10
+        header = f"{'Country':<{shift_country}} {'Price':<{shift_price}} {'Currency'}"
+        print(header)
+        print("-" * len(header))
+        for i, price in enumerate(sorted_prices):
+            if i == count:
+                break
+            country, price_val, currency = price[0], price[1][0], price[1][1]
+            print(f"{country:<{shift_country}} {price_val:<{shift_price}} {currency}")
+    else:
+        for i, price in enumerate(sorted_prices):
+            if i == count:
+                break
+            print(f"{price[0]}: {price[1][0]} {price[1][1]}")
 
 
 def main(args):
@@ -156,14 +168,15 @@ def main(args):
         product_id = extract_product_id(args.url)
     request_prices(product_id, args.normalize)
     sort_prices()
-    out_result(args.count)
+    out_result(args.count, args.pretty)
 
 
 def init_parser():
     parser = ArgumentParser()
     parser.add_argument("-u", "--url", required=True, type=str, help="url to scrape")
     parser.add_argument("-n", "--normalize", action="store_true", help="normalize currencies to USD")
-    parser.add_argument("-с", "--count", type=int, default=10, help="number of countries to show")
+    parser.add_argument("-c", "--count", type=int, default=10, help="number of countries to show")
+    parser.add_argument("-p", "--pretty", action="store_true", help="shows result as pretty table")
     return parser
 
 
