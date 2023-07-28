@@ -18,6 +18,7 @@ The **Game Price Checker** is a Python script that allows you to extract a URL f
 
     - `-u`, `--url`: The URL of the game page to scrape (required).
     - `-n`, `--normalize`: (Optional) Normalize currencies to USD.
+    - `-c`, `--count` : (Optional) default = 10 , number of countries to show in sorted prices result
 
 Example:
 ```
