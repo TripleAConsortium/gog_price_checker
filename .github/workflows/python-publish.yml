@@ -27,8 +27,6 @@ jobs:
   create_release:
     runs-on: ubuntu-latest
     needs: get_version
-    env:
-      UPLOAD_URL: ${{ steps.create_release.outputs.upload_url }}
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python
@@ -47,12 +45,13 @@ jobs:
         run: |
           cp gog_price_checker/__main__.py app.py
       - name: Upload app.py as a release asset
+        id: upload_asset
         uses: actions/upload-release-asset@v1
         with:
-          upload_url: ${{ env.UPLOAD_URL }}
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./app.py
           asset_name: app.py
-          asset_asset_content_type: text/plain
+          asset_content_type: text/plain
 
   deploy:
     runs-on: ubuntu-latest
