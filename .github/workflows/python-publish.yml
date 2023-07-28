@@ -18,7 +18,10 @@ jobs:
           python-version: '3.x'
       - name: Get version from setup.py
         id: set_version
-        run: echo "::set-output name=version::$(python -c 'import re; version = re.search(r'"'"'version\s*=\s*"(.*?)"'"'"', open("setup.py").read()).group(1); print(version)'"
+        run: |
+          VERSION=$(python setup.py --version)
+          echo "Version: $VERSION"
+          echo "::set-output name=version::$VERSION" 
 
   create_release:
     runs-on: ubuntu-latest
