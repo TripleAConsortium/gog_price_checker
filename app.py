@@ -142,8 +142,9 @@ def sort_prices():
 
 def out_result(count):
     sorted_prices = sort_prices()
+    count = min(abs(count), len(sorted_prices))
     for i, price in enumerate(sorted_prices):
-        if i >= count:
+        if i == count:
             break
         print(f"{price[0]}: {price[1][0]} {price[1][1]}")
 
