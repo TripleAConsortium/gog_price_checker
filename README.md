@@ -13,7 +13,7 @@ The **Game Price Checker** is a Python script that allows you to extract a URL f
 
 ## Installation
 ```
-pip instal gog_price_checker
+pip install gog-price-checker
 ```
 
 ## How to Use
