@@ -1,4 +1,5 @@
 # Game Price Checker 💵
+[![PyPI](https://img.shields.io/pypi/v/gog-price-checker)](https://pypi.org/project/gog-price-checker/)
 
 The **Game Price Checker** is a Python script that allows you to extract a URL from the clipboard, download the web page content, and retrieve the price of a game from the GOG API. The script is designed to work on macOS systems.
 
@@ -9,6 +10,11 @@ The **Game Price Checker** is a Python script that allows you to extract a URL f
 - Regular expressions (re) module
 - Threading module (for concurrent requests)
 - Logging module (for logging)
+
+## Installation
+```
+pip instal gog_price_checker
+```
 
 ## How to Use
 
@@ -23,7 +29,7 @@ The **Game Price Checker** is a Python script that allows you to extract a URL f
 
 Example:
 ```
-python app.py -u https://www.gog.com/game/diablo -n -p
+gog_price_checker -u https://www.gog.com/game/diablo -n -p
 ```
 Output:
 ```
