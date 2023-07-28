@@ -98,4 +98,4 @@ def init_parser():
 
 if __name__ == "__main__":
     arguments = init_parser().parse_args()
-    main(arguments)
+    main(args=arguments)
