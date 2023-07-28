@@ -44,11 +44,13 @@ jobs:
       - name: Copy app.py
         run: |
           cp gog_price_checker/__main__.py app.py
-      - name: Upload app.py as an asset
-        uses: actions/upload-artifact@v2
+      - name: Upload app.py as a release asset
+        uses: actions/upload-release-asset@v1
         with:
-          name: app
-          path: app.py
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          asset_path: ./app.py
+          asset_name: app.py
+          asset_content_type: text/plain
 
   deploy:
     runs-on: ubuntu-latest
