@@ -4,8 +4,8 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name="gog_price_checker",
-    version="0.1.9",
+    name="gog-price-checker",
+    version="0.1.10",
     author="Alex",
     author_email="iampopovich@example.com",
     description="A tool to check game prices from GOG API",
@@ -15,7 +15,7 @@ setup(
     packages=["gog_price_checker"],
     entry_points={
         "console_scripts": [
-            "gog_price_checker = gog_price_checker.__main__:main"
+            "gog-price-checker = gog_price_checker.__main__:main"
         ]
     },
     classifiers=[

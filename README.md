@@ -30,7 +30,7 @@ pip install gog-price-checker
 
 Example:
 ```
-gog_price_checker -u https://www.gog.com/game/diablo -n -p
+gog-price-checker -u https://www.gog.com/game/diablo -n -p
 ```
 Output:
 ```
