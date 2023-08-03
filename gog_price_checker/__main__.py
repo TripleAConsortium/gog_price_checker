@@ -5,6 +5,18 @@ from argparse import ArgumentParser
 from urllib import request as urllib_request
 import json
 
+
+class Price:
+    country_code = None
+    country_name = None
+    currency = None
+    value = None
+
+    def __init__(self, country_code, country_name):
+        self.country_name = country_name
+        self.country_code = country_code
+
+
 COUNTRIES = {
     "US": "United States",
     "AR": "Argentina",
@@ -90,7 +102,7 @@ COUNTRIES = {
     "ZA": "South Africa",
     "AE": "United Arab Emirates"}
 
-COUNTRY_PRICES = {}
+COUNTRY_PRICES = [Price(key, value) for key, value in COUNTRIES.items()]
 
 logging.basicConfig(
     level=logging.INFO,
@@ -106,9 +118,9 @@ def extract_product_id(url):
     return product_id
 
 
-def request_price(product_id, country_code, normalize=None):
+def request_price(product_id, price, normalize=None):
     data = None
-    url = f"https://api.gog.com/products/{product_id}/prices?countryCode={country_code}"
+    url = f"https://api.gog.com/products/{product_id}/prices?countryCode={price.country_code}"
     if normalize:
         url += "&currency=USD"
     try:
@@ -116,10 +128,11 @@ def request_price(product_id, country_code, normalize=None):
         response = urllib_request.urlopen(url).read().decode('utf-8')
         data = json.loads(response)
         logging.debug(data)
-        price = data['_embedded']['prices'][0]['finalPrice'].split(" ")
-        price[0] = int(price[0]) / 100
+        final_price = data['_embedded']['prices'][0]['finalPrice'].split(" ")
+        final_price[0] = int(final_price[0]) / 100
         logging.debug(price)
-        COUNTRY_PRICES[COUNTRIES[country_code]] = price
+        price.value = final_price[0]
+        price.currency = final_price[1]
     except KeyError as no_key_error:
         logging.error(no_key_error)
         logging.error(data)
@@ -127,38 +140,38 @@ def request_price(product_id, country_code, normalize=None):
 
 def request_prices(product_id, normalize=None):
     threads = []
-    for country_code in COUNTRIES:
-        t = Thread(target=request_price, args=(product_id, country_code, normalize))
+    for price in COUNTRY_PRICES:
+        t = Thread(target=request_price, args=(product_id, price, normalize))
         threads.append(t)
         t.start()
-
     for t in threads:
         t.join()
 
 
 def sort_prices():
-    return sorted(COUNTRY_PRICES.items(), key=lambda x: x[1], reverse=False)
+    return sorted(COUNTRY_PRICES, key=lambda x: x.value, reverse=False)
 
 
 def out_result(count, pretty=None):
     sorted_prices = sort_prices()
     count = min(abs(count), len(sorted_prices))
+    out_string = ""
     if pretty:
         shift_country = 25
         shift_price = 10
-        header = f"{'Country':<{shift_country}} {'Price':<{shift_price}} {'Currency'}"
-        print(header)
-        print("-" * len(header))
+        header = f"{'Country':<{shift_country}} {'Price':<{shift_price}} {'Currency'}\n"
+        out_string += header
+        out_string += "-" * (len(header)-1)
         for i, price in enumerate(sorted_prices):
             if i == count:
                 break
-            country, price_val, currency = price[0], price[1][0], price[1][1]
-            print(f"{country:<{shift_country}} {price_val:<{shift_price}} {currency}")
+            out_string += f"\n{price.country_name:<{shift_country}} {price.value:<{shift_price}} {price.currency}"
     else:
         for i, price in enumerate(sorted_prices):
             if i == count:
                 break
-            print(f"{price[0]}: {price[1][0]} {price[1][1]}")
+            out_string += f"\n{price.country_name}: {price.value} {price.currency}"
+    print(out_string)
 
 
 def main():
