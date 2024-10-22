@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="gog-price-checker",
-    version="1.0.0",
+    version="1.0.1",
     author="Alex",
     author_email="iampopovich@example.com",
     description="A tool to check game prices from GOG API",

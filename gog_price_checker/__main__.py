@@ -11,6 +11,7 @@ class Price:
     country_name = None
     currency = None
     value = None
+    value_usd = None
 
     def __init__(self, country_code, country_name):
         self.country_name = country_name
@@ -128,11 +129,14 @@ def request_price(product_id, price, normalize=None):
         response = urllib_request.urlopen(url).read().decode('utf-8')
         data = json.loads(response)
         logging.debug(data)
-        final_price = data['_embedded']['prices'][0]['finalPrice'].split(" ")
-        final_price[0] = int(final_price[0]) / 100
+        for i , item in enumerate(data['_embedded']['prices']):
+            if i == 0:
+                final_price = item['finalPrice'].split(" ")
+                price.value = int(final_price[0]) / 100
+                price.currency = final_price[1]
+            if item['currency']['code'] == "USD":
+                price.value_usd = int(item['finalPrice'].split(" ")[0]) / 100
         logging.debug(price)
-        price.value = final_price[0]
-        price.currency = final_price[1]
     except KeyError as no_key_error:
         logging.error(no_key_error)
         logging.error(data)
@@ -149,7 +153,7 @@ def request_prices(product_id, normalize=None):
 
 
 def sort_prices():
-    return sorted(COUNTRY_PRICES, key=lambda x: x.value, reverse=False)
+    return sorted(COUNTRY_PRICES, key=lambda x: x.value_usd, reverse=False)
 
 
 def out_result(count, pretty=None):
