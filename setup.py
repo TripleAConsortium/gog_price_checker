@@ -5,10 +5,10 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="gog-price-checker",
-    version="1.0.1",
+    version="1.1.0",
     author="Alex",
     author_email="iampopovich@example.com",
-    description="A tool to check game prices from GOG API",
+    description="A tool to check game prices from GOG API and compare prices across wishlists",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/iampopovich/gog_price_checker",
