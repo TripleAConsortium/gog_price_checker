@@ -346,7 +346,7 @@ def display_best_prices(best_prices, pretty=False):
         product_width = max(len(product) for product in best_prices.keys()) + 2
         price_width = 10
         currency_width = 8
-        country_width = 20
+        # country_width is not used in the formatting below
 
         header = f"{'Product':<{product_width}} {'Price':<{price_width}} {'Currency':<{currency_width}} {'Country'}"
         print(header)

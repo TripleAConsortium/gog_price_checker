@@ -18,6 +18,7 @@ setup(
             "gog-price-checker = gog_price_checker.__main__:main"
         ]
     },
+    python_requires=">=3.6",
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
